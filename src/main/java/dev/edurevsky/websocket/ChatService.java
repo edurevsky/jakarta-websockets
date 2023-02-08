@@ -2,6 +2,7 @@ package dev.edurevsky.websocket;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;
 
 import java.io.IOException;
@@ -27,15 +28,15 @@ public class ChatService {
         this.sessions.remove(session);
     }
 
-    public void broadcastMessage(Session session, String message) {
+    public void broadcastMessage(Session session, Message message) {
         var username = this.sessions.get(session);
 
-        var finalMessage = "%s: %s".formatted(username, message);
+        message.setUsername(username);
 
         sessions.keySet().forEach(s -> {
             try {
-                s.getBasicRemote().sendText(finalMessage);
-            } catch (IOException e) {
+                s.getBasicRemote().sendObject(message);
+            } catch (IOException | EncodeException e) {
                 throw new RuntimeException(e);
             }
         });

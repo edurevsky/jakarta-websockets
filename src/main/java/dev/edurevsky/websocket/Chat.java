@@ -1,17 +1,16 @@
 package dev.edurevsky.websocket;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint(
+        value = "/chat/{username}",
+        encoders = {MessageEncoder.class},
+        decoders = {MessageDecoder.class}
+)
 public class Chat {
 
     @Inject
@@ -23,7 +22,7 @@ public class Chat {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
+    public void onMessage(Session session, Message message) {
         this.chatService.broadcastMessage(session, message);
     }
 

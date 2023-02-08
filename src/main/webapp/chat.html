@@ -28,7 +28,7 @@
         }
 
         websocket.onmessage = function (event) {
-            const data = event.data
+            const data = JSON.parse(event.data)
 
             const message = createMessage(data)
             appendMessage(messages, message)
@@ -37,15 +37,17 @@
         function sendMessage() {
             const text = messageInput.value
 
-            websocket.send(text)
+            const json = JSON.stringify({ content: text })
+
+            websocket.send(json)
 
             messageInput.value = ''
             return false
         }
 
-        function createMessage(content) {
+        function createMessage(data) {
             const p = document.createElement('p')
-            p.innerText = content
+            p.innerText = `${data.username}: ${data.content}`
             return p
         }
 

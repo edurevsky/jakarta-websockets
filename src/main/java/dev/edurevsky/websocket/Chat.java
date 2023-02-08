@@ -23,7 +23,7 @@ public class Chat {
 
     @OnMessage
     public void onMessage(Session session, Message message) {
-        this.chatService.broadcastMessage(session, message);
+        this.chatService.broadcastUserMessage(session, message);
     }
 
     @OnOpen
@@ -32,7 +32,8 @@ public class Chat {
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, CloseReason closeReason) {
+        System.out.println(closeReason);
         this.chatService.removeChatter(session);
     }
 }

@@ -1,14 +1,15 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Index</title>
 </head>
 <body>
+    <a href="<%= request.getContextPath() %>/chat.jsp">Go to chat</a>
 
     <script>
 
-        let websocket = new WebSocket('ws://localhost:8080/websocket-1.0-SNAPSHOT/ping')
+        let websocket = new WebSocket('ws://localhost:8080<%= request.getContextPath() %>/ping')
 
         websocket.onopen = function () {
             console.log('open')

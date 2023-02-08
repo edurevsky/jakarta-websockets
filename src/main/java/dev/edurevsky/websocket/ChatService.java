@@ -22,20 +22,33 @@ public class ChatService {
 
     public void addChatter(Session session, String username) {
         this.sessions.put(session, username);
+        this.broadcastServerMessage("%s joined".formatted(username));
     }
 
     public void removeChatter(Session session) {
+        var username = this.sessions.get(session);
         this.sessions.remove(session);
+        this.broadcastServerMessage("%s left".formatted(username));
     }
 
-    public void broadcastMessage(Session session, Message message) {
+    public void broadcastUserMessage(Session session, Message message) {
         var username = this.sessions.get(session);
 
         message.setUsername(username);
 
-        sessions.keySet().forEach(s -> {
+        this.broadcastMessage(message);
+    }
+
+    private void broadcastServerMessage(String content) {
+        var message = new Message("Server", content);
+
+        this.broadcastMessage(message);
+    }
+
+    private void broadcastMessage(Message message) {
+        sessions.keySet().forEach(session -> {
             try {
-                s.getBasicRemote().sendObject(message);
+                session.getBasicRemote().sendObject(message);
             } catch (IOException | EncodeException e) {
                 throw new RuntimeException(e);
             }

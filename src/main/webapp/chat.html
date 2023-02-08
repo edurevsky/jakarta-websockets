@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+
+    <input type="text" id="message-input" />
+    <button id="send" type="button" onclick="sendMessage()">Send</button>
+    <div id="messages"></div>
+
+    <script>
+
+        const messages = document.getElementById('messages')
+        const messageInput = document.getElementById('message-input')
+
+        const username = prompt('Insert your username:')
+
+        const websocket = new WebSocket(`ws://localhost:8080/websocket-1.0-SNAPSHOT/chat/${username}`)
+
+        websocket.onopen = function () {
+            console.log('open')
+        }
+
+        websocket.onclose = function () {
+            console.log('close')
+        }
+
+        websocket.onmessage = function (event) {
+            const data = event.data
+
+            const message = createMessage(data)
+            appendMessage(messages, message)
+        }
+
+        function sendMessage() {
+            const text = messageInput.value
+
+            websocket.send(text)
+
+            messageInput.value = ''
+            return false
+        }
+
+        function createMessage(content) {
+            const p = document.createElement('p')
+            p.innerText = content
+            return p
+        }
+
+        function appendMessage(messagesElement, message) {
+            messagesElement.append(message)
+        }
+
+    </script>
+</body>
+</html>

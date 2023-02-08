@@ -6,5 +6,26 @@
 </head>
 <body>
 
+    <script>
+
+        let websocket = new WebSocket('ws://localhost:8080/websocket-1.0-SNAPSHOT/ping')
+
+        websocket.onopen = function () {
+            console.log('open')
+        }
+
+        websocket.onclose = function () {
+            console.log('close')
+        }
+
+        setTimeout(function () {
+            websocket.send('')
+        }, 1500)
+
+        setTimeout(function () {
+            websocket.close()
+        }, 5000)
+
+    </script>
 </body>
 </html>

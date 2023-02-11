@@ -5,7 +5,10 @@
     <title>Index</title>
 </head>
 <body>
+
     <a href="<%= request.getContextPath() %>/chat.jsp">Go to chat</a>
+    <br />
+    <a href="<%= request.getContextPath() %>/news.jsp">Go to news</a>
 
     <script>
 
